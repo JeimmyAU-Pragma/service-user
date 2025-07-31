@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.pragma.user.domain.usecase.UserUseCaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-07-31T13:25:19" hostname="JEIMMY-AGUILAR.local" time="0.23">
+  <properties/>
+  <testcase name="shouldGetUserById()" classname="com.pragma.user.domain.usecase.UserUseCaseTest" time="0.23"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
