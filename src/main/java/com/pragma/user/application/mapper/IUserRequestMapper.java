@@ -1,5 +1,6 @@
 package com.pragma.user.application.mapper;
 
+import com.pragma.user.application.dto.request.EmployeeRequestDto;
 import com.pragma.user.application.dto.request.UserRequestDto;
 import com.pragma.user.domain.model.UserModel;
 import org.mapstruct.Mapper;
@@ -10,4 +11,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IUserRequestMapper {
     UserModel toUser(UserRequestDto userRequestDto);
+    UserModel toEmployee(EmployeeRequestDto employeeRequestDto);
 }

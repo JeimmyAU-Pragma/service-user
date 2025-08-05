@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface IUserServicePort {
 
-    //void saveOwner(UserModel user, String rawPassword);
+    void saveEmployee(UserModel user, Rol rol) ;
+
     void saveUser(UserModel user, Rol rol);
 
     List<UserModel> getAllUsers();

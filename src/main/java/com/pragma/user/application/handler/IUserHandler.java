@@ -1,5 +1,6 @@
 package com.pragma.user.application.handler;
 
+import com.pragma.user.application.dto.request.EmployeeRequestDto;
 import com.pragma.user.application.dto.request.UserRequestDto;
 import com.pragma.user.application.dto.response.UserResponseDto;
 
@@ -10,6 +11,8 @@ public interface IUserHandler {
    // void saveUser(UserRequestDto userRequestDto);
 
     void createOwner(UserRequestDto dto, String callerRole);
+
+    void createEmployee(EmployeeRequestDto dto, String callerRole);
 
 
     List<UserResponseDto> getAllUsers();

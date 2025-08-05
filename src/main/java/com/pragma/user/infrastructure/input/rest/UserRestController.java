@@ -1,5 +1,6 @@
 package com.pragma.user.infrastructure.input.rest;
 
+import com.pragma.user.application.dto.request.EmployeeRequestDto;
 import com.pragma.user.application.dto.request.UserRequestDto;
 import com.pragma.user.application.dto.response.UserResponseDto;
 import com.pragma.user.application.handler.IUserHandler;
@@ -42,7 +43,21 @@ public class UserRestController {
         userHandler.createOwner(dto, role);
 
     }
+    @Operation(summary = "Add a new employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "employee created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "employee already exists", content = @Content)
+    })
 
+    @PostMapping("/employee")
+    public void createEmployee(@RequestBody EmployeeRequestDto dto,
+                               @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        String role = jwtUtil.extractRole(token);
+        userHandler.createEmployee(dto, role);
+
+    }
 
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
