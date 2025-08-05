@@ -1,5 +1,6 @@
 package com.pragma.user.application.handler.impl;
 
+import com.pragma.user.application.dto.request.EmployeeRequestDto;
 import com.pragma.user.application.dto.request.UserRequestDto;
 import com.pragma.user.application.dto.response.UserResponseDto;
 import com.pragma.user.application.handler.IUserHandler;
@@ -35,6 +36,12 @@ public class UserHandler implements IUserHandler {
         validateRole(callerRole, Rol.ADMINISTRADOR);
         UserModel user = userRequestMapper.toUser(userRequestDto);
         userServicePort.saveUser(user, Rol.PROPIETARIO);
+    }
+    @Override
+    public void createEmployee(EmployeeRequestDto employeeRequestDto, String callerRole) {
+        validateRole(callerRole,Rol.PROPIETARIO);
+        UserModel user = userRequestMapper.toEmployee(employeeRequestDto);
+        userServicePort.saveEmployee(user, Rol.EMPLEADO);
     }
 
     @Override

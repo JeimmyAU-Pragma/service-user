@@ -26,20 +26,23 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void saveUser(UserModel user, Rol rol) {
         validate(user);
+        if (Period.between(user.getBirthDate(), LocalDate.now()).getYears() < 18) {
+            throw new DomainException("Debe ser mayor de edad");
+        }
         user.setRol(rol);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userPersistencePort.saveUser(user);
     }
 
-    /*
-        @Override
-        public void saveOwner(UserModel user, Rol rol) {
-            validate(user);
+    @Override
+    public void saveEmployee(UserModel user, Rol rol) {
+        validate(user);
 
-            user.setRol(rol);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userPersistencePort.saveUser(user);
-        }*/
+        user.setRol(rol);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userPersistencePort.saveUser(user);
+    }
+
     @Override
     public List<UserModel> getAllUsers() {
         return userPersistencePort.getAllUsers();
@@ -61,9 +64,7 @@ public class UserUseCase implements IUserServicePort {
         if (!user.getPhoneNumber().matches("^\\+?\\d{1,13}$")) {
             throw new DomainException("Celular inválido");
         }
-        if (Period.between(user.getBirthDate(), LocalDate.now()).getYears() < 18) {
-            throw new DomainException("Debe ser mayor de edad");
-        }
+
 
     }
 }
