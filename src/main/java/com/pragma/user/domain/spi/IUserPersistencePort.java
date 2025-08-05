@@ -3,6 +3,7 @@ package com.pragma.user.domain.spi;
 import com.pragma.user.domain.model.UserModel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserPersistencePort {
     UserModel saveUser(UserModel user);
@@ -11,4 +12,5 @@ public interface IUserPersistencePort {
 
     UserModel getUserById(Long userId);
 
+    Optional<UserModel> findByEmail(String email);
 }

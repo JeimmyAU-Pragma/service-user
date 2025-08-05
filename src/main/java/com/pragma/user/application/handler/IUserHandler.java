@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface IUserHandler {
 
-    void saveUser(UserRequestDto userRequestDto);
+   // void saveUser(UserRequestDto userRequestDto);
+
+    void createOwner(UserRequestDto dto, String callerRole);
+
 
     List<UserResponseDto> getAllUsers();
 
