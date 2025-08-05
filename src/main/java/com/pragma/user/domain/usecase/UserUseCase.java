@@ -1,5 +1,6 @@
 package com.pragma.user.domain.usecase;
 // se hacen las validaciones en el caso de uso
+
 import com.pragma.user.domain.api.IUserServicePort;
 import com.pragma.user.domain.exception.DomainException;
 import com.pragma.user.domain.model.Rol;
@@ -23,21 +24,27 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void saveOwner(UserModel user, String rawPassword) {
+    public void saveUser(UserModel user, Rol rol) {
         validate(user);
-       if (rawPassword == null || rawPassword.isBlank()) {
-            throw new IllegalArgumentException("La contraseña no puede estar vacía.");
-        }
-
-        //user.setRol(Rol.PROPIETARIO);
+        user.setRol(rol);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userPersistencePort.saveUser(user);
     }
 
+    /*
+        @Override
+        public void saveOwner(UserModel user, Rol rol) {
+            validate(user);
+
+            user.setRol(rol);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userPersistencePort.saveUser(user);
+        }*/
     @Override
     public List<UserModel> getAllUsers() {
         return userPersistencePort.getAllUsers();
     }
+
 
     @Override
     public UserModel getUserById(Long id) {

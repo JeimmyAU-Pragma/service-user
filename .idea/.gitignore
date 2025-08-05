@@ -1,0 +1,28 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Environment-dependent path to Maven home directory
+/mavenHomeManager.xml
+# === Build directories ===
+/target/
+/build/
+/out/
+/bin/
+# === System files ===
+.DS_Store
+Thumbs.db
+# === Coverage reports ===
+jacoco.exec
+*.ec
+
+# === Gradle ===
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+# === Swagger/OpenAPI ===
+**/swagger-ui.html
+**/swagger-resources/
+**/v3/api-docs/
+**/api-docs/

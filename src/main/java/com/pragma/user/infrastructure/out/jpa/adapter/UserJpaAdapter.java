@@ -17,11 +17,6 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
 
-    public UserJpaAdapter(IUserEntityMapper userEntityMapper, IUserRepository userRepository) {
-        this.userEntityMapper = userEntityMapper;
-        this.userRepository = userRepository;
-    }
-
     @Override
     public UserModel saveUser(UserModel user) {
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
@@ -43,6 +38,11 @@ public class UserJpaAdapter implements IUserPersistencePort {
     public UserModel getUserById(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         return userEntityMapper.toUser(userEntity.orElse(null));
+    }
+
+    @Override
+    public Optional<UserModel> findByEmail(String email) {
+        return userRepository.findOneByEmail(email).map(userEntityMapper::toUser);
     }
 
 }
