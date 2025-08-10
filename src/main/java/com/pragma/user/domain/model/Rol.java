@@ -1,8 +1,8 @@
 package com.pragma.user.domain.model;
 
 public enum Rol {
-    ADMINISTRADOR,
+   /* ADMINISTRADOR,
     PROPIETARIO,
     EMPLEADO,
-    CLIENTE
+    CLIENTE*/
 }

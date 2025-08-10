@@ -41,8 +41,9 @@ public class UserRestController {
         String token = authHeader.replace("Bearer ", "");
         String role = jwtUtil.extractRole(token);
         userHandler.createOwner(dto, role);
-
+        // userHandler.saveUser(dto);
     }
+
     @Operation(summary = "Add a new employee")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "employee created", content = @Content),

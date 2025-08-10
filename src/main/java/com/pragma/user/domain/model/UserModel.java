@@ -3,7 +3,7 @@ package com.pragma.user.domain.model;
 import java.time.LocalDate;
 
 public class UserModel {
-    private Long userId;
+    private Long id;
     private String firstName;
     private String lastName;
     private String identityDocument;
@@ -11,10 +11,10 @@ public class UserModel {
     private LocalDate birthDate;
     private String email;
     private String password;
-    private Rol rol;
+    private RoleModel role;
 
-    public UserModel(Long userId, String firstName, String lastName, String identityDocument, String phoneNumber, LocalDate birthDate, String email, String password, Rol rol) {
-        this.userId = userId;
+    public UserModel(Long id, String firstName, String lastName, String identityDocument, String phoneNumber, LocalDate birthDate, String email, String password, RoleModel role) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.identityDocument = identityDocument;
@@ -22,19 +22,15 @@ public class UserModel {
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
-        this.rol = rol;
+        this.role = role;
     }
 
-    public UserModel() {
-
+    public Long getId() {
+        return id;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -93,12 +89,11 @@ public class UserModel {
         this.password = password;
     }
 
-    public Rol getRol() {
-        return rol;
+    public RoleModel getRole() {
+        return role;
     }
 
-    public void setRol(Rol rol) {
-        this.rol = rol;
+    public void setRole(RoleModel roleModel) {
+        this.role = roleModel;
     }
-
 }

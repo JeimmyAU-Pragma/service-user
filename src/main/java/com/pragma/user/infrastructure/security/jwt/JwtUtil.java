@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
+    //cambiar a variables de entorno
     private final static String ACCESS_TOKEN_SECRET = "Zy1vNcA3rBpX7LsGt49qWeJkMmPnRtUv";
 
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetailsImpl userDetails) {
         Map<String, Object> extraInfo = new HashMap<>();
-        extraInfo.put("rol", userDetails.getAuthorities().stream()
+        extraInfo.put("id", userDetails.getId());
+        extraInfo.put("role", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining()));
 
