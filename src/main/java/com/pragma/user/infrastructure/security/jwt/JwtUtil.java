@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
-    //cambiar a variables de entorno
-    private final static String ACCESS_TOKEN_SECRET = "Zy1vNcA3rBpX7LsGt49qWeJkMmPnRtUv";
-
+    
+    @Value("${jwt.secret}")
+    private String accessTokenSecret;
 
     public String generateToken(UserDetailsImpl userDetails) {
         Map<String, Object> extraInfo = new HashMap<>();
@@ -44,7 +45,7 @@ public class JwtUtil {
     }
 
     public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("rol", String.class));
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -69,6 +70,6 @@ public class JwtUtil {
     }
 
     private Key getSignKey() {
-        return Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(accessTokenSecret.getBytes(StandardCharsets.UTF_8));
     }
 }
