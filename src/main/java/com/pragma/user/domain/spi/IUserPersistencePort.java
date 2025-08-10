@@ -10,7 +10,7 @@ public interface IUserPersistencePort {
 
     List<UserModel> getAllUsers();
 
-    UserModel getUserById(Long userId);
+    UserModel getUserById(Long id);
 
-    Optional<UserModel> findByEmail(String email);
+   Optional<UserModel> findByEmail(String email);
 }

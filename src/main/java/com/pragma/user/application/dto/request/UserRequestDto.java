@@ -1,6 +1,5 @@
 package com.pragma.user.application.dto.request;
 
-import com.pragma.user.domain.model.Rol;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,6 @@ public class UserRequestDto {
     private LocalDate birthDate;
     private String email;
     private String password;
-    private Rol rol;
+    private String roleName;
 
 }
