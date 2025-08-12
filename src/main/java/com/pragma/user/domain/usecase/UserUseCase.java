@@ -1,5 +1,4 @@
 package com.pragma.user.domain.usecase;
-// se hacen las validaciones en el caso de uso
 
 import com.pragma.user.domain.api.IUserServicePort;
 import com.pragma.user.domain.exception.DomainException;
@@ -28,45 +27,36 @@ public class UserUseCase implements IUserServicePort {
         this.rolePersistencePort = rolePersistencePort;
     }
 
-//    @Override
-//    public void saveUser(UserModel user, RoleModel role) {
-//        validate(user);
-//        if (Period.between(user.getBirthDate(), LocalDate.now()).getYears() < 18) {
-//            throw new DomainException("Debe ser mayor de edad");
-//        }
-//        RoleModel roleActual = rolePersistencePort.getRoleById(role.getId());
-//
-//        user.setRol(roleActual);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userPersistencePort.saveUser(user);
-//    }
-//
-//    @Override
-//    public void saveEmployee(UserModel user, RoleModel role) {
-//        validate(user);
-//        user.setRol(rol);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userPersistencePort.saveUser(user);
-//    }
-
     @Override
     public void saveEmployee(UserModel user) {
         validate(user);
-        RoleModel role = rolePersistencePort.findByName("PROPIETARIO")
-                .orElseThrow(() -> new IllegalArgumentException("Rol PROPIETARIO no existe"));
-        user.setRole(role);
+        RoleModel employee = rolePersistencePort.findByName(ROLE_EMPLOYEE)
+                .orElseThrow(() -> new IllegalArgumentException(ROLE_NOT_FOUND));
+        user.setRole(employee);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userPersistencePort.saveUser(user);
     }
 
     @Override
-    public void saveUser(UserModel user) {
+    public void saveOwner(UserModel user) {
         validate(user);
         if (Period.between(user.getBirthDate(), LocalDate.now()).getYears() < 18) {
             throw new DomainException(MESSAGE_ADULT);
         }
-        RoleModel ownerRole = rolePersistencePort.findByName("ADMINISTRADOR")
-                .orElseThrow(() -> new IllegalArgumentException("Rol  no existe"));
+        RoleModel ownerRole = rolePersistencePort.findByName(ROLE_OWNER)
+                .orElseThrow(() -> new IllegalArgumentException(ROLE_NOT_FOUND));
+
+        user.setRole(ownerRole);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userPersistencePort.saveUser(user);
+    }
+
+    @Override
+    public void saveClient(UserModel user) {
+        validate(user);
+
+        RoleModel ownerRole = rolePersistencePort.findByName(ROLE_CLIENT)
+                .orElseThrow(() -> new IllegalArgumentException(ROLE_NOT_FOUND));
 
         user.setRole(ownerRole);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -94,7 +84,9 @@ public class UserUseCase implements IUserServicePort {
         if (!user.getPhoneNumber().matches("^\\+?\\d{1,13}$")) {
             throw new DomainException(INVALID_PHONE_NUMBER);
         }
-
+        if (userPersistencePort.findByEmail(user.getEmail()).isPresent()) {
+            throw new DomainException(EMAIL_ALREADY_EXISTS);
+        }
 
     }
 }

@@ -1,5 +1,5 @@
 package com.pragma.user.domain.api;
-//CRUD
+
 
 import com.pragma.user.domain.model.UserModel;
 
@@ -9,10 +9,11 @@ public interface IUserServicePort {
 
     void saveEmployee(UserModel user);
 
-    void saveUser(UserModel user);
+    void saveOwner(UserModel user);
 
     List<UserModel> getAllUsers();
 
     UserModel getUserById(Long userId);
 
+    void saveClient(UserModel user);
 }

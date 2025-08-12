@@ -17,32 +17,30 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
 
-<span class="nc" id="L20">    public UserJpaAdapter(IUserEntityMapper userEntityMapper, IUserRepository userRepository) {</span>
-<span class="nc" id="L21">        this.userEntityMapper = userEntityMapper;</span>
-<span class="nc" id="L22">        this.userRepository = userRepository;</span>
-<span class="nc" id="L23">    }</span>
-
     @Override
     public UserModel saveUser(UserModel user) {
-<span class="nc" id="L27">        UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));</span>
-<span class="nc" id="L28">        return userEntityMapper.toUser(userEntity);</span>
+<span class="nc" id="L22">        UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));</span>
+<span class="nc" id="L23">        return userEntityMapper.toUser(userEntity);</span>
     }
-
-
 
     @Override
     public List&lt;UserModel&gt; getAllUsers() {
-<span class="nc" id="L35">        List&lt;UserEntity&gt; entityList = userRepository.findAll();</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (entityList.isEmpty()) {</span>
-<span class="nc" id="L37">            throw new NoUserFoundException();</span>
+<span class="nc" id="L28">        List&lt;UserEntity&gt; entityList = userRepository.findAll();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (entityList.isEmpty()) {</span>
+<span class="nc" id="L30">            throw new NoUserFoundException();</span>
         }
-<span class="nc" id="L39">        return userEntityMapper.toUserList(entityList);</span>
+<span class="nc" id="L32">        return userEntityMapper.toUserList(entityList);</span>
     }
 
     @Override
     public UserModel getUserById(Long id) {
-<span class="nc" id="L44">        Optional&lt;UserEntity&gt; userEntity = userRepository.findById(id);</span>
-<span class="nc" id="L45">        return userEntityMapper.toUser(userEntity.orElse(null));</span>
+<span class="nc" id="L37">        Optional&lt;UserEntity&gt; userEntity = userRepository.findById(id);</span>
+<span class="nc" id="L38">        return userEntityMapper.toUser(userEntity.orElse(null));</span>
+    }
+
+    @Override
+    public Optional&lt;UserModel&gt; findByEmail(String email) {
+<span class="nc" id="L43">        return userRepository.findOneByEmail(email).map(userEntityMapper::toUser);</span>
     }
 
 }

@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 
-import static com.pragma.user.domain.util.DomainConstants.INVALID_CRENDENTIALS;
+import static com.pragma.user.domain.util.DomainConstants.INVALID_CREDENTIALS;
 import static com.pragma.user.domain.util.DomainConstants.USER_NOT_FOUND;
 
 public class AuthUseCase implements IAuthServicePort {
@@ -33,7 +33,7 @@ public class AuthUseCase implements IAuthServicePort {
         UserModel user = getUserByEmail(email);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new DomainException(INVALID_CRENDENTIALS);
+            throw new DomainException(INVALID_CREDENTIALS);
         }
 
         UserDetailsImpl userDetails = new UserDetailsImpl(

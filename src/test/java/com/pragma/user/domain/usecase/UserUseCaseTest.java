@@ -52,14 +52,14 @@ class UserUseCaseTest {
     }
 
     @Test
-    void shouldSaveUserSuccessfully() {
-        RoleModel admin = new RoleModel(99L, "ADMINISTRADOR", "Admin del sistema");
-        when(rolePersistencePort.findByName("ADMINISTRADOR")).thenReturn(Optional.of(admin));
+    void shouldsaveOwnerSuccessfully() {
+        RoleModel admin = new RoleModel(99L, "PROPIETARIO", "Propietario del sistema");
+        when(rolePersistencePort.findByName("PROPIETARIO")).thenReturn(Optional.of(admin));
         when(passwordEncoderPort.encode("rawPass123")).thenReturn("encryptedPass");
 
-        userUseCase.saveUser(validUser);
+        userUseCase.saveOwner(validUser);
 
-        verify(rolePersistencePort).findByName("ADMINISTRADOR");
+        verify(rolePersistencePort).findByName("PROPIETARIO");
         verify(passwordEncoderPort).encode("rawPass123");
         verify(userPersistencePort).saveUser(validUser);
 
@@ -72,7 +72,7 @@ class UserUseCaseTest {
         validUser.setIdentityDocument("12A456");
 
         DomainException ex = assertThrows(DomainException.class,
-                () -> userUseCase.saveUser(validUser));
+                () -> userUseCase.saveOwner(validUser));
 
         assertEquals(INVALID_DOCUMENT, ex.getMessage());
         verify(userPersistencePort, never()).saveUser(any());
@@ -81,7 +81,7 @@ class UserUseCaseTest {
     @Test
     void shouldThrowExceptionWhenEmailIsInvalid() {
         validUser.setEmail("invalid-email");
-        DomainException ex = assertThrows(DomainException.class, () -> userUseCase.saveUser(validUser));
+        DomainException ex = assertThrows(DomainException.class, () -> userUseCase.saveOwner(validUser));
         assertEquals(INVALID_EMAIL, ex.getMessage());
         verify(userPersistencePort, never()).saveUser(any());
     }
@@ -89,7 +89,7 @@ class UserUseCaseTest {
     @Test
     void shouldThrowExceptionWhenUserIsMinor() {
         validUser.setBirthDate(LocalDate.now().minusYears(15));
-        DomainException ex = assertThrows(DomainException.class, () -> userUseCase.saveUser(validUser));
+        DomainException ex = assertThrows(DomainException.class, () -> userUseCase.saveOwner(validUser));
         assertEquals(MESSAGE_ADULT, ex.getMessage());
         verify(passwordEncoderPort, never()).encode(anyString());
         verify(userPersistencePort, never()).saveUser(any());
@@ -113,4 +113,7 @@ class UserUseCaseTest {
         assertEquals("Jeimmy", result.getFirstName());
         verify(userPersistencePort).getUserById(1L);
     }
+
+
+
 }

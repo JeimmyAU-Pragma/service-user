@@ -8,14 +8,16 @@ import java.util.List;
 
 public interface IUserHandler {
 
-    void saveUser(UserRequestDto userRequestDto);
+   // void saveUser(UserRequestDto userRequestDto);
 
-    void createOwner(UserRequestDto dto, String callerRole);
+    void saveOwner(UserRequestDto dto);
 
-    void createEmployee(EmployeeRequestDto dto, String callerRole);
+    void saveEmployee(EmployeeRequestDto dto);
 
     List<UserResponseDto> getAllUsers();
 
     UserResponseDto getUserById(Long userId);
+
+    void saveClient(EmployeeRequestDto dto);
 
 }

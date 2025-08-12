@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.pragma.user.domain.util.DomainConstants.INVALID_CRENDENTIALS;
+import static com.pragma.user.domain.util.DomainConstants.INVALID_CREDENTIALS;
 import static com.pragma.user.domain.util.DomainConstants.USER_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,7 +70,7 @@ class AuthUseCaseTest {
         DomainException ex = assertThrows(DomainException.class,
                 () -> authUseCase.login("admin@admin.com", "wrong"));
 
-        assertEquals(INVALID_CRENDENTIALS, ex.getMessage());
+        assertEquals(INVALID_CREDENTIALS, ex.getMessage());
     }
 
     @Test

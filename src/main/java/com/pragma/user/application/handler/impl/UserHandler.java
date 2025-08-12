@@ -23,20 +23,25 @@ public class UserHandler implements IUserHandler {
     private final IUserRequestMapper userRequestMapper;
     private final IUserResponseMapper userResponseMapper;
 
+//    @Override
+//    public void saveUser(UserRequestDto userRequestDto) {
+//        UserModel user = userRequestMapper.toUser(userRequestDto);
+//        userServicePort.saveOwner(user);
+//    }
     @Override
-    public void saveUser(UserRequestDto userRequestDto) {
+    public void saveOwner(UserRequestDto userRequestDto) {
         UserModel user = userRequestMapper.toUser(userRequestDto);
-        userServicePort.saveUser(user);
+        userServicePort.saveOwner(user);
     }
     @Override
-    public void createOwner(UserRequestDto userRequestDto, String callerRole) {
-        UserModel user = userRequestMapper.toUser(userRequestDto);
-        userServicePort.saveUser(user);
-    }
-    @Override
-    public void createEmployee(EmployeeRequestDto employeeRequestDto, String callerRole) {
+    public void saveEmployee(EmployeeRequestDto employeeRequestDto) {
         UserModel user = userRequestMapper.toEmployee(employeeRequestDto);
         userServicePort.saveEmployee(user);
+    }
+    @Override
+    public void saveClient(EmployeeRequestDto employeeRequestDto) {
+        UserModel client = userRequestMapper.toEmployee(employeeRequestDto);
+        userServicePort.saveEmployee(client);
     }
 
     @Override
@@ -48,6 +53,7 @@ public class UserHandler implements IUserHandler {
     public UserResponseDto getUserById(Long userId) {
         return userResponseMapper.toResponse(userServicePort.getUserById(userId));
     }
+
 
 
 }

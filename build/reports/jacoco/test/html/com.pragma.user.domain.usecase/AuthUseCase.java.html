@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">manejo-usuarios</a> &gt; <a href="index.source.html" class="el_package">com.pragma.user.domain.usecase</a> &gt; <span class="el_source">AuthUseCase.java</span></div><h1>AuthUseCase.java</h1><pre class="source lang-java linenums">package com.pragma.user.domain.usecase;
+
+import com.pragma.user.domain.api.IAuthServicePort;
+import com.pragma.user.domain.exception.DomainException;
+import com.pragma.user.domain.model.UserModel;
+import com.pragma.user.domain.spi.IPasswordEncoderPort;
+import com.pragma.user.domain.spi.IUserPersistencePort;
+import com.pragma.user.infrastructure.security.jwt.JwtUtil;
+import com.pragma.user.infrastructure.security.jwt.UserDetailsImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.List;
+
+import static com.pragma.user.domain.util.DomainConstants.INVALID_CREDENTIALS;
+import static com.pragma.user.domain.util.DomainConstants.USER_NOT_FOUND;
+
+public class AuthUseCase implements IAuthServicePort {
+
+    private final IUserPersistencePort userPersistencePort;
+    private final IPasswordEncoderPort passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    public AuthUseCase(IUserPersistencePort userPersistencePort,
+                       IPasswordEncoderPort passwordEncoder,
+<span class="nc" id="L25">                       JwtUtil jwtUtil) {</span>
+<span class="nc" id="L26">        this.userPersistencePort = userPersistencePort;</span>
+<span class="nc" id="L27">        this.passwordEncoder = passwordEncoder;</span>
+<span class="nc" id="L28">        this.jwtUtil = jwtUtil;</span>
+<span class="nc" id="L29">    }</span>
+
+    @Override
+    public String login(String email, String password) {
+<span class="nc" id="L33">        UserModel user = getUserByEmail(email);</span>
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (!passwordEncoder.matches(password, user.getPassword())) {</span>
+<span class="nc" id="L36">            throw new DomainException(INVALID_CREDENTIALS);</span>
+        }
+
+<span class="nc" id="L39">        UserDetailsImpl userDetails = new UserDetailsImpl(</span>
+<span class="nc" id="L40">                user.getId(),</span>
+<span class="nc" id="L41">                user.getEmail(),</span>
+<span class="nc" id="L42">                user.getPassword(),</span>
+<span class="nc" id="L43">                List.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + user.getRole().getName().toUpperCase())</span>
+                )
+        );
+
+<span class="nc" id="L47">        return jwtUtil.generateToken(userDetails);</span>
+    }
+
+
+    @Override
+    public UserModel getUserByEmail(String email) {
+<span class="nc" id="L53">        return userPersistencePort.findByEmail(email)</span>
+<span class="nc" id="L54">                .orElseThrow(() -&gt; new DomainException(USER_NOT_FOUND + email ));</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
