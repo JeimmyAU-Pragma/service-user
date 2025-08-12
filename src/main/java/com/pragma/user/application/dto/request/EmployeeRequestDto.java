@@ -13,6 +13,4 @@ public class EmployeeRequestDto {
     private String phoneNumber;
     private String email;
     private String password;
-    private String roleName;
-
 }

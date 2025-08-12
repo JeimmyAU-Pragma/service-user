@@ -1,41 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BeanConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">manejo-usuarios</a> &gt; <a href="index.source.html" class="el_package">com.pragma.user.infrastructure.configuration</a> &gt; <span class="el_source">BeanConfiguration.java</span></div><h1>BeanConfiguration.java</h1><pre class="source lang-java linenums">package com.pragma.user.infrastructure.configuration;
 
 
+import com.pragma.user.domain.api.IAuthServicePort;
 import com.pragma.user.domain.api.IUserServicePort;
 import com.pragma.user.domain.spi.IPasswordEncoderPort;
+import com.pragma.user.domain.spi.IRolePersistencePort;
 import com.pragma.user.domain.spi.IUserPersistencePort;
+import com.pragma.user.domain.usecase.AuthUseCase;
 import com.pragma.user.domain.usecase.UserUseCase;
 import com.pragma.user.infrastructure.out.jpa.adapter.BCryptPasswordEncoderAdapter;
 import com.pragma.user.infrastructure.out.jpa.adapter.UserJpaAdapter;
 import com.pragma.user.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.pragma.user.infrastructure.out.jpa.repository.IUserRepository;
+import com.pragma.user.infrastructure.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class BeanConfiguration {
 
 
     @Bean
     public IUserPersistencePort userPersistencePort(IUserRepository repository, IUserEntityMapper mapper) {
-<span class="nc" id="L25">        return new UserJpaAdapter(repository, mapper);</span>
+<span class="nc" id="L31">        return new UserJpaAdapter(repository, mapper);</span>
     }
 
 
     @Bean
-        public IUserServicePort userServicePort(IUserPersistencePort userPersistencePort,
-                                                IPasswordEncoderPort passwordEncoderPort) {
-<span class="nc" id="L32">            return new UserUseCase(userPersistencePort, passwordEncoderPort);</span>
-        }
+    public IUserServicePort userServicePort(IUserPersistencePort userPersistencePort,
+                                            IPasswordEncoderPort passwordEncoderPort,
+                                            IRolePersistencePort rolePersistencePort) {
+<span class="nc" id="L39">        return new UserUseCase(userPersistencePort, passwordEncoderPort, rolePersistencePort);</span>
+    }
 
 
     @Bean
     public IPasswordEncoderPort passwordEncoderPort() {
-<span class="nc" id="L38">        return new BCryptPasswordEncoderAdapter(new BCryptPasswordEncoder());</span>
+<span class="nc" id="L45">        return new BCryptPasswordEncoderAdapter(new BCryptPasswordEncoder());</span>
+    }
+
+
+    @Bean
+    public IAuthServicePort authServicePort(IUserPersistencePort userPersistencePort,
+                                            IPasswordEncoderPort passwordEncoderPort,
+                                            JwtUtil jwtUtil) {
+<span class="nc" id="L53">        return new AuthUseCase(userPersistencePort, passwordEncoderPort, jwtUtil);</span>
     }
 
 }

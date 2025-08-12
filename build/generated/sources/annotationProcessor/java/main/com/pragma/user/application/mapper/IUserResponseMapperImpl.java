@@ -1,6 +1,8 @@
 package com.pragma.user.application.mapper;
 
+import com.pragma.user.application.dto.request.RoleDto;
 import com.pragma.user.application.dto.response.UserResponseDto;
+import com.pragma.user.domain.model.RoleModel;
 import com.pragma.user.domain.model.UserModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-31T14:25:26-0500",
+    date = "2025-08-12T06:35:00-0500",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.5.jar, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
@@ -23,13 +25,16 @@ public class IUserResponseMapperImpl implements IUserResponseMapper {
 
         UserResponseDto userResponseDto = new UserResponseDto();
 
+        if ( userModel.getId() != null ) {
+            userResponseDto.setId( String.valueOf( userModel.getId() ) );
+        }
         userResponseDto.setFirstName( userModel.getFirstName() );
         userResponseDto.setLastName( userModel.getLastName() );
         userResponseDto.setIdentityDocument( userModel.getIdentityDocument() );
         userResponseDto.setPhoneNumber( userModel.getPhoneNumber() );
         userResponseDto.setBirthDate( userModel.getBirthDate() );
         userResponseDto.setEmail( userModel.getEmail() );
-        userResponseDto.setRol( userModel.getRol() );
+        userResponseDto.setRole( roleModelToRoleDto( userModel.getRole() ) );
 
         return userResponseDto;
     }
@@ -46,5 +51,19 @@ public class IUserResponseMapperImpl implements IUserResponseMapper {
         }
 
         return list;
+    }
+
+    protected RoleDto roleModelToRoleDto(RoleModel roleModel) {
+        if ( roleModel == null ) {
+            return null;
+        }
+
+        RoleDto roleDto = new RoleDto();
+
+        roleDto.setId( roleModel.getId() );
+        roleDto.setName( roleModel.getName() );
+        roleDto.setDescription( roleModel.getDescription() );
+
+        return roleDto;
     }
 }

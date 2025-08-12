@@ -13,8 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,15 +34,11 @@ public class UserRestController {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
-
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/owner")
-    public void createOwner(@RequestBody UserRequestDto dto,
-                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-
-        String token = authHeader.replace("Bearer ", "");
-        String role = jwtUtil.extractRole(token);
-        userHandler.createOwner(dto, role);
-        // userHandler.saveUser(dto);
+    public ResponseEntity<Void> saveOwner(@RequestBody UserRequestDto dto) {
+        userHandler.saveOwner(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Add a new employee")
@@ -49,16 +46,26 @@ public class UserRestController {
             @ApiResponse(responseCode = "201", description = "employee created", content = @Content),
             @ApiResponse(responseCode = "409", description = "employee already exists", content = @Content)
     })
-
+    @PreAuthorize("hasRole('PROPIETARIO')")
     @PostMapping("/employee")
-    public void createEmployee(@RequestBody EmployeeRequestDto dto,
-                               @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<Void> saveEmployee(@RequestBody EmployeeRequestDto dto) {
 
-        String token = authHeader.replace("Bearer ", "");
-        String role = jwtUtil.extractRole(token);
-        userHandler.createEmployee(dto, role);
-
+        userHandler.saveEmployee(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @Operation(summary = "Add a new client")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "client created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "client already exists", content = @Content)
+    })
+    @PostMapping("/client")
+    public ResponseEntity<Void> saveClient(@RequestBody EmployeeRequestDto dto) {
+
+        userHandler.saveClient(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
 
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
